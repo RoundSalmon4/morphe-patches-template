@@ -5,9 +5,22 @@ Morphe patches for apps I use.
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-#### A list of your patches will automatically be shown here after your first patches release is created.
+> **[v1.0.0](https://github.com/RoundSalmon4/morphe-patches-template/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;1 patches total
+<details open>
+<summary>📦 SeriesGuide&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
 
-&nbsp;
+**🎯 Supported versions:**
+
+| 2026.2.2 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Unlock Premium](#unlock-premium) | Unlocks all premium features. |  |
+
+</details>
+
 <!-- PATCHES_END -->
 
 ## 🚀 Get started
