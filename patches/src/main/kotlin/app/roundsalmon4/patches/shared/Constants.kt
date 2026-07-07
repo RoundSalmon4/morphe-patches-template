@@ -9,7 +9,7 @@ object Constants {
         name = "SeriesGuide",
         packageName = "com.battlelancer.seriesguide",
         apkFileType = ApkFileType.APK,
-        appIconColor = 0xFFE53935,
+        appIconColor = "#E53935",
         targets = listOf(
             AppTarget(version = "2026.2.2")
         )
