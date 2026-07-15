@@ -12,8 +12,8 @@ Morphe patches for apps I use.
 
 **🎯 Supported versions:**
 
-| 2026.2.2 |
-| :---: |
+| 2026.2.2 | 2026.3.0 |
+| :---: | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
