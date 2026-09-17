@@ -73,6 +73,12 @@ jobs:
             esac
           done
 
+          # Our CI configuration is fork-specific (release.yml, dependabot, sync
+          # tooling). Restore it from origin/main so upstream workflow changes never
+          # enter the sync branch - this also avoids the GITHUB_TOKEN lacking the
+          # 'workflows' permission needed to push .github/workflows/* changes.
+          git checkout origin/main -- .github/ 2>/dev/null || true
+
           # If after resolution the branch matches main (all upstream changes are in
           # files we keep ours), there is nothing to sync.
           if git diff --quiet origin/main; then
