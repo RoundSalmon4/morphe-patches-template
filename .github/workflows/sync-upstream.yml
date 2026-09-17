@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -59,14 +59,17 @@ jobs:
           # Resolve any conflicts with a policy:
           # - fork-specific files: always keep ours
           # - shared infrastructure files: take upstream
+          # Modify/delete conflicts (file exists on only one side) are handled by
+          # falling back to 'git rm --force': keeping ours means keeping our
+          # deletion, taking upstream means keeping their deletion.
           git diff --name-only --diff-filter=U | while read -r f; do
             case "$f" in
-              README.md|CHANGELOG.md|patches-list.json|patches-bundle.json|gradle.properties|settings.gradle.kts|.releaserc|patches/*|extensions/*)
+              .github/*|README.md|CHANGELOG.md|patches-list.json|patches-bundle.json|gradle.properties|settings.gradle.kts|.releaserc|patches/*|extensions/*)
                 echo "Keeping ours: $f"
-                git checkout --ours -- "$f" ;;
+                git checkout --ours -- "$f" 2>/dev/null || git rm --force -- "$f" ;;
               *)
                 echo "Taking upstream: $f"
-                git checkout --theirs -- "$f" ;;
+                git checkout --theirs -- "$f" 2>/dev/null || git rm --force -- "$f" ;;
             esac
           done
 
@@ -93,7 +96,7 @@ jobs:
 
           This branch squash-merges the upstream changes into a single `chore:` commit, so merging it cannot trigger a semantic-release bump or introduce upstream release commits into `main`.
 
-          Fork-specific files (README, patches, changelog, generated metadata) are kept as-is. Shared infrastructure files (dependency versions, gradle wrapper, npm deps, dependabot) follow upstream.
+          Fork-specific files (README, patches, changelog, generated metadata, CI workflow config) are kept as-is. Shared infrastructure files (dependency versions, gradle wrapper, npm deps) follow upstream.
 
           Review the diff, and merge with **Squash and merge** when ready.
           EOF
