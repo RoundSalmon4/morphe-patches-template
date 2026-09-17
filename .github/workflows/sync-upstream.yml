@@ -81,6 +81,18 @@ jobs:
           # the 'workflows' permission required to write .github/workflows/*.
           git checkout origin/main -- .github/ 2>/dev/null || true
 
+          # settings.gradle.kts is fork-specific (our project name) but it also
+          # carries the app.morphe.patches Gradle plugin version, which must track
+          # upstream - it decides the Kotlin compiler version used to build the
+          # patches. Keep our file and copy just the plugin version across.
+          git checkout origin/main -- settings.gradle.kts
+          UPSTREAM_PLUGIN_VERSION=$(git show upstream/main:settings.gradle.kts \
+            | sed -n 's/.*app\.morphe\.patches.*version "\([^"]*\)".*/\1/p')
+          if [ -n "$UPSTREAM_PLUGIN_VERSION" ]; then
+            echo "Syncing app.morphe.patches plugin version to $UPSTREAM_PLUGIN_VERSION"
+            sed -i -E "s/(app\.morphe\.patches\"\) version \")[^\"]+/\1${UPSTREAM_PLUGIN_VERSION}/" settings.gradle.kts
+          fi
+
           # If after resolution the branch matches main (all upstream changes are in
           # files we keep ours), there is nothing to sync.
           if git diff --quiet origin/main; then
