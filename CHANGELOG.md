@@ -1,9 +1,3 @@
-## [1.0.6](https://github.com/RoundSalmon4/morphe-patches-template/compare/v1.0.5...v1.0.6) (2026-09-17)
-
-### 🐛 Bug Fixes
-
-* handle modify/delete conflicts and keep CI config in upstream sync ([e22526f](https://github.com/RoundSalmon4/morphe-patches-template/commit/e22526f6444344e3beb38b55ecbd23b2770af607))
-
 ## [1.0.5](https://github.com/RoundSalmon4/morphe-patches-template/compare/v1.0.4...v1.0.5) (2026-09-17)
 
 ### 🚀 Updated App Support
