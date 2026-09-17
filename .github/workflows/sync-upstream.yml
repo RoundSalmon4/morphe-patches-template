@@ -3,8 +3,8 @@ name: Sync upstream template
 on:
   workflow_dispatch:
   schedule:
-    # Monthly on the 1st, 06:00 UTC. Matches the monthly dependabot interval.
-    - cron: '0 6 1 * *'
+    # Weekly on Monday, 06:00 UTC.
+    - cron: '0 6 * * 1'
 
 permissions:
   contents: write
