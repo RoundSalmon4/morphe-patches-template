@@ -23,6 +23,8 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          token: ${{ secrets.PAT }}
+          persist-credentials: true
 
       - name: Fetch upstream
         run: |
@@ -75,8 +77,8 @@ jobs:
 
           # Our CI configuration is fork-specific (release.yml, dependabot, sync
           # tooling). Restore it from origin/main so upstream workflow changes never
-          # enter the sync branch - this also avoids the GITHUB_TOKEN lacking the
-          # 'workflows' permission needed to push .github/workflows/* changes.
+          # enter the sync branch - this also avoids needing the push token to hold
+          # the 'workflows' permission required to write .github/workflows/*.
           git checkout origin/main -- .github/ 2>/dev/null || true
 
           # If after resolution the branch matches main (all upstream changes are in
@@ -95,7 +97,10 @@ jobs:
       - name: Open or update sync PR
         if: steps.check.outputs.count != '0' && steps.prepare.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Use the same PAT secret as the other repos. A PAT bypasses the
+          # repository setting that otherwise blocks GITHUB_TOKEN from creating
+          # pull requests. Falls back to GITHUB_TOKEN if PAT is not set.
+          GH_TOKEN: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
         run: |
           BODY=$(cat <<'EOF'
           Auto-synced changes from [MorpheApp/morphe-patches-template](https://github.com/MorpheApp/morphe-patches-template).
