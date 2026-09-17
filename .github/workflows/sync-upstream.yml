@@ -113,13 +113,20 @@ jobs:
           EOF
           )
 
-          if gh pr list --base main --head upstream-sync --json number --jq '.[0].number' | grep -q .; then
-            echo "Sync PR already exists, updating it."
-            gh pr edit --base main --head upstream-sync \
+          # Pin the base repository explicitly. gh resolves the PR base repo from
+          # the git remotes, and because this workflow adds an 'upstream' remote
+          # pointing at MorpheApp it would otherwise open the PR there instead of
+          # in this fork - which the token has no access to.
+          REPO="${{ github.repository }}"
+
+          EXISTING=$(gh pr list --repo "$REPO" --base main --head upstream-sync --json number --jq '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            echo "Sync PR #$EXISTING already exists, updating it."
+            gh pr edit "$EXISTING" --repo "$REPO" \
               --title "chore: sync changes from MorpheApp template" \
               --body "$BODY"
           else
-            gh pr create --base main --head upstream-sync \
+            gh pr create --repo "$REPO" --base main --head upstream-sync \
               --title "chore: sync changes from MorpheApp template" \
               --body "$BODY"
           fi
